@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ContactDetailsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#EFEDEE"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="157dp"
+            app:cardBackgroundColor="#EFEDEE" >
+
+            <ImageView
+                android:id="@+id/avatar"
+                android:layout_width="160dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/face" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="246dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="160dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/contact_name"
+                android:textColor="#000"
+                android:textSize="36sp" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/firstNumber"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@drawable/text_views"
+            android:drawableLeft="@drawable/phone_icon"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:text="@string/contact_number1"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/secondNumber"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@drawable/text_views"
+            android:drawableLeft="@drawable/phone_icon"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:text="@string/contact_number2"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/otherNums"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:textColor="#000"
+            android:background="@drawable/text_views"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="..." />
+
+        <TextView
+            android:id="@+id/firstEmail"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@drawable/text_views"
+            android:drawableLeft="@drawable/email_icon"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:text="@string/contact_email1"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/secondEmail"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@drawable/text_views"
+            android:drawableLeft="@drawable/email_icon"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:text="@string/contact_email2"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/otherEmails"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:textColor="#000"
+            android:background="@drawable/text_views"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="..." />
+
+        <TextView
+            android:id="@+id/Description"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@drawable/text_views"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:text="@string/description"
+            android:textColor="#000" />
+
+    </LinearLayout>
+</FrameLayout>
