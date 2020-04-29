@@ -1,11 +1,10 @@
 package com.gmail.yarolave.lesson;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
-import android.view.View;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment, new ContactListFragment()).commit();
+                    .add(R.id.container, new ContactListFragment()).commit();
         }
 
     }
