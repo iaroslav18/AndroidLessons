@@ -19,13 +19,18 @@ public class ContactDetailsFragment extends Fragment {
 
     public static ContactDetailsFragment newInstance(int paramId) {
         ContactDetailsFragment fragment = new ContactDetailsFragment();
-
+        Bundle args = new Bundle();
+        args.putInt("paramId", paramId);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            paramId = getArguments().getInt("paramId");
+        }
     }
 
     @Override
