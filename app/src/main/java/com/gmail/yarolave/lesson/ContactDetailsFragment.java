@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class ContactDetailsFragment extends Fragment {
 
@@ -17,9 +19,8 @@ public class ContactDetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static ContactDetailsFragment newInstance(int paramId) {
+    public static ContactDetailsFragment newInstance(int paramId, Bundle args) {
         ContactDetailsFragment fragment = new ContactDetailsFragment();
-        Bundle args = new Bundle();
         args.putInt("paramId", paramId);
         fragment.setArguments(args);
         return fragment;
@@ -36,8 +37,29 @@ public class ContactDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_contact_details, container, false);
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.setTitle("Детали контакта");
-        return inflater.inflate(R.layout.fragment_contact_details, container, false);
+        setResources(view);
+        return view;
+    }
+
+    private void setResources(View view) {
+        if (getArguments() != null) {
+            ImageView photo = view.findViewById(R.id.avatar);
+            photo.setImageResource(getArguments().getInt("photo"));
+            TextView name = view.findViewById(R.id.name);
+            name.setText(getArguments().getString("name"));
+            TextView number1 = view.findViewById(R.id.firstNumber);
+            number1.setText(getArguments().getString("number1"));
+            TextView number2 = view.findViewById(R.id.secondNumber);
+            number2.setText(getArguments().getString("number2"));
+            TextView email1 = view.findViewById(R.id.firstEmail);
+            email1.setText(getArguments().getString("email1"));
+            TextView email2 = view.findViewById(R.id.secondEmail);
+            email2.setText(getArguments().getString("email2"));
+            TextView description = view.findViewById(R.id.description);
+            description.setText(getArguments().getString("description"));
+        }
     }
 }
