@@ -1,7 +1,6 @@
 package com.gmail.yarolave.lesson;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -13,7 +12,6 @@ import android.os.IBinder;
 
 public class MainActivity extends AppCompatActivity {
 
-    public Bundle contactListArgs, contactDetailsArgs;
     private ContactsService contactsService;
     private boolean bound;
 
@@ -35,10 +33,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            getContactsResources();
-            ContactListFragment contactListFragment = ContactListFragment.newInstance(contactListArgs);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, contactListFragment).commit();
+                    .add(R.id.container, new ContactListFragment()).commit();
         }
     }
 
@@ -58,10 +54,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void getContactsResources() {
+    public Bundle getContactList() {
         ContactsService.GetContactList getContactList = new ContactsService.GetContactList();
-        contactListArgs = getContactList.doInBackground();
-        ContactsService.GetContactDetails getContactDetails = new ContactsService.GetContactDetails();
-        contactDetailsArgs = getContactDetails.doInBackground();
+        return getContactList.doInBackground();
     }
+
+    public Bundle getContactDetails() {
+        ContactsService.GetContactDetails getContactDetails = new ContactsService.GetContactDetails();
+        return getContactDetails.doInBackground();
+    }
+
 }
