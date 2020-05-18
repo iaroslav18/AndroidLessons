@@ -21,8 +21,8 @@ public class ContactListFragment extends Fragment implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MainActivity mainActivity = (MainActivity) getActivity();
-        setArguments(mainActivity.getContactList());
+        ContactsService.GetContactList getContactList = new ContactsService.GetContactList();
+        setArguments(getContactList.doInBackground());
     }
 
     @Override
@@ -51,7 +51,6 @@ public class ContactListFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View view) {
         CardView card = (CardView) view.findViewById(R.id.card1);
-        MainActivity mainActivity = (MainActivity) getActivity();
         ContactDetailsFragment details = ContactDetailsFragment.newInstance(card.getId());
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container, details);

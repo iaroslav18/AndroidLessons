@@ -54,14 +54,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public Bundle getContactList() {
-        ContactsService.GetContactList getContactList = new ContactsService.GetContactList();
-        return getContactList.doInBackground();
-    }
-
-    public Bundle getContactDetails() {
-        ContactsService.GetContactDetails getContactDetails = new ContactsService.GetContactDetails();
-        return getContactDetails.doInBackground();
-    }
-
 }

@@ -14,7 +14,6 @@ public class ContactDetailsFragment extends Fragment {
 
     private int paramId;
 
-
     public ContactDetailsFragment() {
         // Required empty public constructor
     }
@@ -30,8 +29,8 @@ public class ContactDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MainActivity mainActivity = (MainActivity) getActivity();
-        setArguments(mainActivity.getContactDetails());
+        ContactsService.GetContactDetails getContactDetails = new ContactsService.GetContactDetails();
+        setArguments(getContactDetails.doInBackground());
         if (getArguments() != null) {
             paramId = getArguments().getInt("paramId");
         }
