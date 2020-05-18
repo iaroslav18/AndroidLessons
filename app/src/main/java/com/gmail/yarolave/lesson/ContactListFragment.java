@@ -18,11 +18,18 @@ public class ContactListFragment extends Fragment implements View.OnClickListene
         // Required empty public constructor
     }
 
+    public static ContactListFragment newInstance() {
+        ContactListFragment fragment = new ContactListFragment();
+        Bundle args = new Bundle();
+        ContactsService.GetContactList getContactList = new ContactsService.GetContactList();
+        getContactList.execute(args);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ContactsService.GetContactList getContactList = new ContactsService.GetContactList();
-        setArguments(getContactList.doInBackground());
     }
 
     @Override

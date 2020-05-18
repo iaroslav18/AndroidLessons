@@ -27,31 +27,29 @@ public class ContactsService extends Service {
     @Override
     public IBinder onBind(Intent intent) { return binder; }
 
-    public static class GetContactList extends AsyncTask<Void, Void, Bundle> {
-        Bundle contactListArgs = new Bundle();
+    public static class GetContactList extends AsyncTask<Bundle, Void, Bundle> {
 
         @Override
-        public Bundle doInBackground(Void... voids) {
-            contactListArgs.putInt("photo", photoId);
-            contactListArgs.putString("name", name);
-            contactListArgs.putString("number1", numbers[0]);
-            return contactListArgs;
+        public Bundle doInBackground(Bundle... contactListArgs) {
+            contactListArgs[0].putInt("photo", photoId);
+            contactListArgs[0].putString("name", name);
+            contactListArgs[0].putString("number1", numbers[0]);
+            return contactListArgs[0];
         }
     }
 
-    public static class GetContactDetails extends AsyncTask<Void, Void, Bundle> {
-        Bundle contactDetailsArgs = new Bundle();
+    public static class GetContactDetails extends AsyncTask<Bundle, Void, Bundle> {
 
         @Override
-        public Bundle doInBackground(Void... voids) {
-            contactDetailsArgs.putInt("photo", photoId);
-            contactDetailsArgs.putString("name", name);
-            contactDetailsArgs.putString("number1", numbers[0]);
-            contactDetailsArgs.putString("email1", emails[0]);
-            contactDetailsArgs.putString("number2", numbers[1]);
-            contactDetailsArgs.putString("email2", emails[1]);
-            contactDetailsArgs.putString("description", description);
-            return contactDetailsArgs;
+        public Bundle doInBackground(Bundle... contactDetailsArgs) {
+            contactDetailsArgs[0].putInt("photo", photoId);
+            contactDetailsArgs[0].putString("name", name);
+            contactDetailsArgs[0].putString("number1", numbers[0]);
+            contactDetailsArgs[0].putString("email1", emails[0]);
+            contactDetailsArgs[0].putString("number2", numbers[1]);
+            contactDetailsArgs[0].putString("email2", emails[1]);
+            contactDetailsArgs[0].putString("description", description);
+            return contactDetailsArgs[0];
         }
     }
 }

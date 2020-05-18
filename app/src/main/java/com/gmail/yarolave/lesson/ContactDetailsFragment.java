@@ -22,6 +22,8 @@ public class ContactDetailsFragment extends Fragment {
         ContactDetailsFragment fragment = new ContactDetailsFragment();
         Bundle args = new Bundle();
         args.putInt("paramId", paramId);
+        ContactsService.GetContactDetails getContactDetails = new ContactsService.GetContactDetails();
+        getContactDetails.execute(args);
         fragment.setArguments(args);
         return fragment;
     }
@@ -29,8 +31,6 @@ public class ContactDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ContactsService.GetContactDetails getContactDetails = new ContactsService.GetContactDetails();
-        setArguments(getContactDetails.doInBackground());
         if (getArguments() != null) {
             paramId = getArguments().getInt("paramId");
         }
