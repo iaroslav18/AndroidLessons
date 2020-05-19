@@ -9,11 +9,14 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 
-
 public class MainActivity extends AppCompatActivity {
 
     private ContactsService contactsService;
     private boolean bound;
+
+    public ContactsService getService() {
+        return contactsService;
+    }
 
     private ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -34,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, ContactListFragment.newInstance()).commit();
+                    .add(R.id.container, new ContactListFragment()).commit();
         }
     }
 

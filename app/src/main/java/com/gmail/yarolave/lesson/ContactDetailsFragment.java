@@ -1,5 +1,6 @@
 package com.gmail.yarolave.lesson;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,9 +11,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ContactDetailsFragment extends Fragment {
+public class ContactDetailsFragment extends Fragment implements DetailsResult {
 
     private int paramId;
+    private ContactsService service;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        service = mainActivity.getService();
+    }
 
     public ContactDetailsFragment() {
         // Required empty public constructor
@@ -22,8 +31,7 @@ public class ContactDetailsFragment extends Fragment {
         ContactDetailsFragment fragment = new ContactDetailsFragment();
         Bundle args = new Bundle();
         args.putInt("paramId", paramId);
-        ContactsService.GetContactDetails getContactDetails = new ContactsService.GetContactDetails();
-        getContactDetails.execute(args);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -31,6 +39,7 @@ public class ContactDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        service.getContactDetails(this);
         if (getArguments() != null) {
             paramId = getArguments().getInt("paramId");
         }
@@ -44,6 +53,11 @@ public class ContactDetailsFragment extends Fragment {
         mainActivity.setTitle("Детали контакта");
         setResources(view);
         return view;
+    }
+
+    @Override
+    public void getDetails(Bundle bundle) {
+        setArguments(bundle);
     }
 
     private void setResources(View view) {

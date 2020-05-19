@@ -7,6 +7,19 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import java.lang.ref.WeakReference;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+interface ContactResult {
+    void getContact(Bundle bundle);
+}
+
+interface DetailsResult {
+    void getDetails(Bundle bundle);
+}
+
 public class ContactsService extends Service {
 
     public final IBinder binder = new ContactsBinder();
@@ -27,29 +40,45 @@ public class ContactsService extends Service {
     @Override
     public IBinder onBind(Intent intent) { return binder; }
 
-    public static class GetContactList extends AsyncTask<Bundle, Void, Bundle> {
-
-        @Override
-        public Bundle doInBackground(Bundle... contactListArgs) {
-            contactListArgs[0].putInt("photo", photoId);
-            contactListArgs[0].putString("name", name);
-            contactListArgs[0].putString("number1", numbers[0]);
-            return contactListArgs[0];
-        }
+    public void getContactList(ContactResult callback) {
+        final WeakReference<ContactResult> weakReference = new WeakReference<ContactResult>(callback);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Bundle bundle = new Bundle();
+                bundle.putInt("photo", photoId);
+                bundle.putString("name", name);
+                bundle.putString("number1", numbers[0]);
+                ContactResult local = weakReference.get();
+                if (local != null) {
+                    local.getContact(bundle);
+                }
+            }
+        });
+        executor.shutdown();
     }
 
-    public static class GetContactDetails extends AsyncTask<Bundle, Void, Bundle> {
-
-        @Override
-        public Bundle doInBackground(Bundle... contactDetailsArgs) {
-            contactDetailsArgs[0].putInt("photo", photoId);
-            contactDetailsArgs[0].putString("name", name);
-            contactDetailsArgs[0].putString("number1", numbers[0]);
-            contactDetailsArgs[0].putString("email1", emails[0]);
-            contactDetailsArgs[0].putString("number2", numbers[1]);
-            contactDetailsArgs[0].putString("email2", emails[1]);
-            contactDetailsArgs[0].putString("description", description);
-            return contactDetailsArgs[0];
-        }
+    public void getContactDetails(DetailsResult callback) {
+        final WeakReference<DetailsResult> weakReference = new WeakReference<DetailsResult>(callback);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Bundle bundle = new Bundle();
+                bundle.putInt("photo", photoId);
+                bundle.putString("name", name);
+                bundle.putString("number1", numbers[0]);
+                bundle.putString("email1", emails[0]);
+                bundle.putString("number2", numbers[1]);
+                bundle.putString("email2", emails[1]);
+                bundle.putString("description", description);
+                DetailsResult local = weakReference.get();
+                if (local != null) {
+                    local.getDetails(bundle);
+                }
+            }
+        });
+        executor.shutdown();
     }
 }

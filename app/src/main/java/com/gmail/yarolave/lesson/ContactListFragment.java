@@ -1,5 +1,6 @@
 package com.gmail.yarolave.lesson;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -12,24 +13,25 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ContactListFragment extends Fragment implements View.OnClickListener {
+public class ContactListFragment extends Fragment implements View.OnClickListener, ContactResult {
+
+    private ContactsService service;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        service = mainActivity.getService();
+    }
 
     public ContactListFragment() {
         // Required empty public constructor
     }
 
-    public static ContactListFragment newInstance() {
-        ContactListFragment fragment = new ContactListFragment();
-        Bundle args = new Bundle();
-        ContactsService.GetContactList getContactList = new ContactsService.GetContactList();
-        getContactList.execute(args);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        service.getContactList(this);
     }
 
     @Override
@@ -42,6 +44,11 @@ public class ContactListFragment extends Fragment implements View.OnClickListene
         mainActivity.setTitle("Список контактов");
         setResources(view);
         return view;
+    }
+
+    @Override
+    public void getContact(Bundle bundle) {
+        setArguments(bundle);
     }
 
     private void setResources(View view) {
