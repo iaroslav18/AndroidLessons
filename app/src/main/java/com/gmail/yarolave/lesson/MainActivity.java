@@ -9,12 +9,17 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 
-public class MainActivity extends AppCompatActivity {
+interface GettingContactsService {
+    ContactsService getContactsService();
+}
+
+public class MainActivity extends AppCompatActivity implements GettingContactsService {
 
     private ContactsService contactsService;
     private boolean bound;
 
-    public ContactsService getService() {
+    @Override
+    public ContactsService getContactsService() {
         return contactsService;
     }
 
@@ -35,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = new Intent(this, ContactsService.class);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new ContactListFragment()).commit();
@@ -42,19 +49,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Intent intent = new Intent(this, ContactsService.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         if (bound) {
             unbindService(connection);
             bound = false;
         }
     }
-
 }

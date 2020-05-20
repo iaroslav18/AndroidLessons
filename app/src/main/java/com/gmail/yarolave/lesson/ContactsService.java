@@ -23,6 +23,7 @@ interface DetailsResult {
 public class ContactsService extends Service {
 
     public final IBinder binder = new ContactsBinder();
+    private ExecutorService executor;
 
     private static final int photoId = R.drawable.face;
     private static final String name = "Ярослав";
@@ -35,6 +36,7 @@ public class ContactsService extends Service {
     }
 
     public ContactsService() {
+        executor = Executors.newSingleThreadExecutor();
     }
 
     @Override
@@ -42,7 +44,6 @@ public class ContactsService extends Service {
 
     public void getContactList(ContactResult callback) {
         final WeakReference<ContactResult> weakReference = new WeakReference<ContactResult>(callback);
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -56,12 +57,10 @@ public class ContactsService extends Service {
                 }
             }
         });
-        executor.shutdown();
     }
 
     public void getContactDetails(DetailsResult callback) {
         final WeakReference<DetailsResult> weakReference = new WeakReference<DetailsResult>(callback);
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -79,6 +78,5 @@ public class ContactsService extends Service {
                 }
             }
         });
-        executor.shutdown();
     }
 }
