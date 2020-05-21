@@ -2,6 +2,7 @@ package com.gmail.yarolave.lesson;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Bundle;
@@ -23,7 +24,7 @@ interface DetailsResult {
 public class ContactsService extends Service {
 
     public final IBinder binder = new ContactsBinder();
-    private ExecutorService executor;
+    private final ExecutorService executor;
 
     private static final int photoId = R.drawable.face;
     private static final String name = "Ярослав";

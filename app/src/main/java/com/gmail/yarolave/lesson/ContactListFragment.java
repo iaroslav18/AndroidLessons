@@ -20,6 +20,7 @@ public class ContactListFragment extends Fragment implements View.OnClickListene
     private ContactsService service;
     private GettingContactsService gettingContactsService;
 
+    private SettingTitle title;
     private View view;
 
     @Override
@@ -28,6 +29,9 @@ public class ContactListFragment extends Fragment implements View.OnClickListene
         if (context instanceof GettingContactsService) {
             gettingContactsService = (GettingContactsService) context;
             service = gettingContactsService.getContactsService();
+        }
+        if (context instanceof SettingTitle) {
+           title.setContactListTitle();
         }
     }
 
@@ -47,8 +51,6 @@ public class ContactListFragment extends Fragment implements View.OnClickListene
         view = inflater.inflate(R.layout.fragment_contact_list, container, false);
         CardView card = (CardView) view.findViewById(R.id.card1);
         card.setOnClickListener(this);
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.setTitle("Список контактов");
         return view;
     }
 
@@ -62,12 +64,14 @@ public class ContactListFragment extends Fragment implements View.OnClickListene
         handler.post(new Runnable() {
             @Override
             public void run() {
-                ImageView photo = view.findViewById(R.id.avatar);
-                photo.setImageResource(bundle.getInt("photo"));
-                TextView name = view.findViewById(R.id.name);
-                name.setText(bundle.getString("name"));
-                TextView number = view.findViewById(R.id.number);
-                number.setText(bundle.getString("number1"));
+                if (view != null) {
+                    ImageView photo = view.findViewById(R.id.avatar);
+                    photo.setImageResource(bundle.getInt("photo"));
+                    TextView name = view.findViewById(R.id.name);
+                    name.setText(bundle.getString("name"));
+                    TextView number = view.findViewById(R.id.number);
+                    number.setText(bundle.getString("number1"));
+                }
             }
         });
     }
@@ -80,6 +84,12 @@ public class ContactListFragment extends Fragment implements View.OnClickListene
         transaction.replace(R.id.container, details);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        view = null;
     }
 
     @Override

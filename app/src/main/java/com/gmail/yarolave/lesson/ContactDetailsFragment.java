@@ -13,12 +13,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
+
 public class ContactDetailsFragment extends Fragment implements DetailsResult {
 
     private int paramId;
     private ContactsService service;
     private GettingContactsService gettingContactsService;
 
+    private SettingTitle title;
     private View view;
 
     @Override
@@ -27,6 +30,9 @@ public class ContactDetailsFragment extends Fragment implements DetailsResult {
         if (context instanceof GettingContactsService) {
             gettingContactsService = (GettingContactsService) context;
             service = gettingContactsService.getContactsService();
+        }
+        if (context instanceof SettingTitle) {
+            title.setContactDetailsTitle();
         }
     }
 
@@ -70,22 +76,30 @@ public class ContactDetailsFragment extends Fragment implements DetailsResult {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                ImageView photo = view.findViewById(R.id.avatar);
-                photo.setImageResource(bundle.getInt("photo"));
-                TextView name = view.findViewById(R.id.name);
-                name.setText(bundle.getString("name"));
-                TextView number1 = view.findViewById(R.id.firstNumber);
-                number1.setText(bundle.getString("number1"));
-                TextView number2 = view.findViewById(R.id.secondNumber);
-                number2.setText(bundle.getString("number2"));
-                TextView email1 = view.findViewById(R.id.firstEmail);
-                email1.setText(bundle.getString("email1"));
-                TextView email2 = view.findViewById(R.id.secondEmail);
-                email2.setText(bundle.getString("email2"));
-                TextView description = view.findViewById(R.id.description);
-                description.setText(bundle.getString("description"));
+                if (view != null) {
+                    ImageView photo = view.findViewById(R.id.avatar);
+                    photo.setImageResource(bundle.getInt("photo"));
+                    TextView name = view.findViewById(R.id.name);
+                    name.setText(bundle.getString("name"));
+                    TextView number1 = view.findViewById(R.id.firstNumber);
+                    number1.setText(bundle.getString("number1"));
+                    TextView number2 = view.findViewById(R.id.secondNumber);
+                    number2.setText(bundle.getString("number2"));
+                    TextView email1 = view.findViewById(R.id.firstEmail);
+                    email1.setText(bundle.getString("email1"));
+                    TextView email2 = view.findViewById(R.id.secondEmail);
+                    email2.setText(bundle.getString("email2"));
+                    TextView description = view.findViewById(R.id.description);
+                    description.setText(bundle.getString("description"));
+                }
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        view = null;
     }
 
     @Override
