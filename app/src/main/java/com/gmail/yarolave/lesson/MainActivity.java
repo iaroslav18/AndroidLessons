@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements GettingContactsSe
     private ContactsService contactsService;
     private boolean bound;
     private Intent intent;
+    private boolean checkInstanceState = false;
 
     @Override
     public ContactsService getContactsService() {
@@ -48,6 +49,10 @@ public class MainActivity extends AppCompatActivity implements GettingContactsSe
             ContactsService.ContactsBinder contactsBinder = (ContactsService.ContactsBinder) binder;
             contactsService = contactsBinder.getContactsService();
             bound = true;
+            if (checkInstanceState) {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.container, new ContactListFragment()).commit();
+            }
         }
 
         @Override
@@ -62,10 +67,7 @@ public class MainActivity extends AppCompatActivity implements GettingContactsSe
         setContentView(R.layout.activity_main);
         intent = new Intent(this, ContactsService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ContactListFragment()).commit();
-        }
+        checkInstanceState = savedInstanceState == null;
     }
 
     @Override

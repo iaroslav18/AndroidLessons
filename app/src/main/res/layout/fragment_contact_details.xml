@@ -17,8 +17,7 @@
             <ImageView
                 android:id="@+id/avatar"
                 android:layout_width="160dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/face" />
+                android:layout_height="match_parent" />
 
             <TextView
                 android:id="@+id/name"

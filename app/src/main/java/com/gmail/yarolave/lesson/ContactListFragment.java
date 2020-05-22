@@ -19,6 +19,7 @@ public class ContactListFragment extends Fragment implements View.OnClickListene
 
     private ContactsService service;
     private GettingContactsService gettingContactsService;
+    private Context currentContext;
 
     private SettingTitle title;
     private View view;
@@ -26,12 +27,10 @@ public class ContactListFragment extends Fragment implements View.OnClickListene
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        currentContext = context;
         if (context instanceof GettingContactsService) {
             gettingContactsService = (GettingContactsService) context;
             service = gettingContactsService.getContactsService();
-        }
-        if (context instanceof SettingTitle) {
-           title.setContactListTitle();
         }
     }
 
@@ -42,7 +41,6 @@ public class ContactListFragment extends Fragment implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        service.getContactList(this);
     }
 
     @Override
@@ -51,27 +49,31 @@ public class ContactListFragment extends Fragment implements View.OnClickListene
         view = inflater.inflate(R.layout.fragment_contact_list, container, false);
         CardView card = (CardView) view.findViewById(R.id.card1);
         card.setOnClickListener(this);
+        if (currentContext instanceof SettingTitle) {
+            title = (SettingTitle) currentContext;
+            title.setContactListTitle();
+        }
+        service.getContactList(this);
         return view;
     }
 
     @Override
     public void getContact(Bundle bundle) {
-        setResources(view, bundle);
+        if (view != null) {
+            setResources(view, bundle);
+        }
     }
 
     private void setResources(final View view, final Bundle bundle) {
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
+        view.post(new Runnable() {
             @Override
             public void run() {
-                if (view != null) {
-                    ImageView photo = view.findViewById(R.id.avatar);
-                    photo.setImageResource(bundle.getInt("photo"));
-                    TextView name = view.findViewById(R.id.name);
-                    name.setText(bundle.getString("name"));
-                    TextView number = view.findViewById(R.id.number);
-                    number.setText(bundle.getString("number1"));
-                }
+                ImageView photo = view.findViewById(R.id.avatar);
+                photo.setImageResource(bundle.getInt("photo"));
+                TextView name = view.findViewById(R.id.name);
+                name.setText(bundle.getString("name"));
+                TextView number = view.findViewById(R.id.number);
+                number.setText(bundle.getString("number1"));
             }
         });
     }

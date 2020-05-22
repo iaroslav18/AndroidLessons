@@ -20,6 +20,7 @@ public class ContactDetailsFragment extends Fragment implements DetailsResult {
     private int paramId;
     private ContactsService service;
     private GettingContactsService gettingContactsService;
+    private Context currentContext;
 
     private SettingTitle title;
     private View view;
@@ -27,12 +28,10 @@ public class ContactDetailsFragment extends Fragment implements DetailsResult {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        currentContext = context;
         if (context instanceof GettingContactsService) {
             gettingContactsService = (GettingContactsService) context;
             service = gettingContactsService.getContactsService();
-        }
-        if (context instanceof SettingTitle) {
-            title.setContactDetailsTitle();
         }
     }
 
@@ -51,7 +50,6 @@ public class ContactDetailsFragment extends Fragment implements DetailsResult {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        service.getContactDetails(this);
         if (getArguments() != null) {
             paramId = getArguments().getInt("paramId");
         }
@@ -63,35 +61,39 @@ public class ContactDetailsFragment extends Fragment implements DetailsResult {
         view = inflater.inflate(R.layout.fragment_contact_details, container, false);
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.setTitle("Детали контакта");
+        if (currentContext instanceof SettingTitle) {
+            title = (SettingTitle) currentContext;
+            title.setContactDetailsTitle();
+        }
+        service.getContactDetails(this);
         return view;
     }
 
     @Override
     public void getDetails(Bundle bundle) {
-        setResources(view, bundle);
+        if (view != null) {
+            setResources(view, bundle);
+        }
     }
 
     private void setResources(final View view, final Bundle bundle) {
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
+        view.post(new Runnable() {
             @Override
             public void run() {
-                if (view != null) {
-                    ImageView photo = view.findViewById(R.id.avatar);
-                    photo.setImageResource(bundle.getInt("photo"));
-                    TextView name = view.findViewById(R.id.name);
-                    name.setText(bundle.getString("name"));
-                    TextView number1 = view.findViewById(R.id.firstNumber);
-                    number1.setText(bundle.getString("number1"));
-                    TextView number2 = view.findViewById(R.id.secondNumber);
-                    number2.setText(bundle.getString("number2"));
-                    TextView email1 = view.findViewById(R.id.firstEmail);
-                    email1.setText(bundle.getString("email1"));
-                    TextView email2 = view.findViewById(R.id.secondEmail);
-                    email2.setText(bundle.getString("email2"));
-                    TextView description = view.findViewById(R.id.description);
-                    description.setText(bundle.getString("description"));
-                }
+                ImageView photo = view.findViewById(R.id.avatar);
+                photo.setImageResource(bundle.getInt("photo"));
+                TextView name = view.findViewById(R.id.name);
+                name.setText(bundle.getString("name"));
+                TextView number1 = view.findViewById(R.id.firstNumber);
+                number1.setText(bundle.getString("number1"));
+                TextView number2 = view.findViewById(R.id.secondNumber);
+                number2.setText(bundle.getString("number2"));
+                TextView email1 = view.findViewById(R.id.firstEmail);
+                email1.setText(bundle.getString("email1"));
+                TextView email2 = view.findViewById(R.id.secondEmail);
+                email2.setText(bundle.getString("email2"));
+                TextView description = view.findViewById(R.id.description);
+                description.setText(bundle.getString("description"));
             }
         });
     }
