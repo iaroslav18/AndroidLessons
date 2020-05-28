@@ -98,5 +98,6 @@ public class ContactListFragment extends Fragment implements View.OnClickListene
     public void onDetach() {
         super.onDetach();
         gettingContactsService = null;
+        currentContext = null;
     }
 }

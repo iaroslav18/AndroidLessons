@@ -59,8 +59,6 @@ public class ContactDetailsFragment extends Fragment implements DetailsResult {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_contact_details, container, false);
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.setTitle("Детали контакта");
         if (currentContext instanceof SettingTitle) {
             title = (SettingTitle) currentContext;
             title.setContactDetailsTitle();
@@ -108,5 +106,6 @@ public class ContactDetailsFragment extends Fragment implements DetailsResult {
     public void onDetach() {
         super.onDetach();
         gettingContactsService = null;
+        currentContext = null;
     }
 }
