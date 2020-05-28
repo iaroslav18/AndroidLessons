@@ -1,17 +1,39 @@
 package com.gmail.yarolave.lesson;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-public class ContactDetailsFragment extends Fragment {
+import java.lang.ref.WeakReference;
+
+public class ContactDetailsFragment extends Fragment implements DetailsResult {
 
     private int paramId;
+    private ContactsService service;
+    private GettingContactsService gettingContactsService;
+    private Context currentContext;
 
+    private SettingTitle title;
+    private View view;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        currentContext = context;
+        if (context instanceof GettingContactsService) {
+            gettingContactsService = (GettingContactsService) context;
+            service = gettingContactsService.getContactsService();
+        }
+    }
 
     public ContactDetailsFragment() {
         // Required empty public constructor
@@ -36,8 +58,54 @@ public class ContactDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.setTitle("Детали контакта");
-        return inflater.inflate(R.layout.fragment_contact_details, container, false);
+        view = inflater.inflate(R.layout.fragment_contact_details, container, false);
+        if (currentContext instanceof SettingTitle) {
+            title = (SettingTitle) currentContext;
+            title.setContactDetailsTitle();
+        }
+        service.getContactDetails(this);
+        return view;
+    }
+
+    @Override
+    public void getDetails(Bundle bundle) {
+        if (view != null) {
+            setResources(view, bundle);
+        }
+    }
+
+    private void setResources(final View view, final Bundle bundle) {
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                ImageView photo = view.findViewById(R.id.avatar);
+                photo.setImageResource(bundle.getInt("photo"));
+                TextView name = view.findViewById(R.id.name);
+                name.setText(bundle.getString("name"));
+                TextView number1 = view.findViewById(R.id.firstNumber);
+                number1.setText(bundle.getString("number1"));
+                TextView number2 = view.findViewById(R.id.secondNumber);
+                number2.setText(bundle.getString("number2"));
+                TextView email1 = view.findViewById(R.id.firstEmail);
+                email1.setText(bundle.getString("email1"));
+                TextView email2 = view.findViewById(R.id.secondEmail);
+                email2.setText(bundle.getString("email2"));
+                TextView description = view.findViewById(R.id.description);
+                description.setText(bundle.getString("description"));
+            }
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        view = null;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        gettingContactsService = null;
+        currentContext = null;
     }
 }
